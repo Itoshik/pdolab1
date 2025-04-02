@@ -5,9 +5,11 @@ if (isset($_GET['auditorium'])) {
     $auditorium = $_GET['auditorium'];
 
     $stmt = $pdo->prepare("
-        SELECT week_day, lesson_number, disciple, type
-        FROM LESSON
-        WHERE auditorium = ?
+        SELECT L.week_day, L.lesson_number, L.disciple, L.type, T.name AS teacher
+        FROM LESSON L
+        JOIN LESSON_TEACHER LT ON L.ID_Lesson = LT.FID_Lesson1
+        JOIN TEACHER T ON LT.FID_Teacher = T.ID_Teacher
+        WHERE L.auditorium = ?
     ");
     $stmt->execute([$auditorium]);
 
@@ -18,6 +20,7 @@ if (isset($_GET['auditorium'])) {
                 <th>Номер пари</th>
                 <th>Дисципліна</th>
                 <th>Тип заняття</th>
+                <th>Викладач</th>
               </tr>";
 
         while ($row = $stmt->fetch()) {
@@ -26,6 +29,7 @@ if (isset($_GET['auditorium'])) {
                     <td>{$row['lesson_number']}</td>
                     <td>{$row['disciple']}</td>
                     <td>{$row['type']}</td>
+                    <td>{$row['teacher']}</td>
                   </tr>";
         }
         echo "</table>";
@@ -33,6 +37,6 @@ if (isset($_GET['auditorium'])) {
         echo "Немає даних для вказаної аудиторії.";
     }
 } else {
-    echo "Введіть аудиторію!";
+    echo "Оберіть аудиторію!";
 }
 ?>

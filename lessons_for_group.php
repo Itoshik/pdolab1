@@ -5,11 +5,12 @@ if (isset($_GET['group'])) {
     $group_id = $_GET['group'];
 
     $stmt = $pdo->prepare("
-        SELECT L.week_day, L.lesson_number, L.auditorium, L.disciple, L.type
-        FROM LESSON L
-        JOIN LESSON_GROUPS LG ON L.ID_Lesson = LG.FID_Lesson2
-        WHERE LG.FID_Groups = ?
-    ");
+    SELECT DISTINCT L.week_day, L.lesson_number, L.auditorium, L.disciple, L.type
+    FROM LESSON L
+    JOIN LESSON_GROUPS LG ON L.ID_Lesson = LG.FID_Lesson2
+    WHERE LG.FID_Groups = ?
+");
+
     $stmt->execute([$group_id]);
 
     if ($stmt->rowCount() > 0) {

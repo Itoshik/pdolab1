@@ -5,11 +5,13 @@ if (isset($_GET['teacher'])) {
     $teacher_id = $_GET['teacher'];
 
     $stmt = $pdo->prepare("
-        SELECT L.week_day, L.lesson_number, L.auditorium, L.disciple, L.type
-        FROM LESSON L
-        JOIN LESSON_TEACHER LT ON L.ID_Lesson = LT.FID_Lesson1
-        WHERE LT.FID_Teacher = ?
-    ");
+    SELECT DISTINCT L.week_day, L.lesson_number, L.auditorium, L.disciple, L.type
+    FROM LESSON L
+    JOIN LESSON_TEACHER LT ON L.ID_Lesson = LT.FID_Lesson1
+    WHERE LT.FID_Teacher = ?
+");
+
+
     $stmt->execute([$teacher_id]);
 
     if ($stmt->rowCount() > 0) {
